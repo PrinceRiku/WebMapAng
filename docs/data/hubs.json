@@ -1,0 +1,42 @@
+[
+  {
+    "iata": "ATL",
+    "degree": 155
+  },
+  {
+    "iata": "ORD",
+    "degree": 151
+  },
+  {
+    "iata": "DEN",
+    "degree": 149
+  },
+  {
+    "iata": "DFW",
+    "degree": 139
+  },
+  {
+    "iata": "MSP",
+    "degree": 117
+  },
+  {
+    "iata": "DTW",
+    "degree": 115
+  },
+  {
+    "iata": "LAS",
+    "degree": 113
+  },
+  {
+    "iata": "CLT",
+    "degree": 112
+  },
+  {
+    "iata": "IAH",
+    "degree": 102
+  },
+  {
+    "iata": "PHL",
+    "degree": 90
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "airport_inventory_count": 1269,
+  "network_airport_count": 560,
+  "no_route_airport_count": 709,
+  "route_line_count": 10706,
+  "unique_undirected_edge_count": 2836,
+  "component_count": 3,
+  "component_sizes": [
+    552,
+    4,
+    4
+  ],
+  "no_route_examples": [
+    "UAM",
+    "TIQ",
+    "FAJ",
+    "SIG",
+    "ORL",
+    "UTO",
+    "SVW",
+    "FRN",
+    "CZF",
+    "BED"
+  ],
+  "source": "OpenFlights airport and route data; airport records attributed to OurAirports",
+  "route_snapshot_year": null,
+  "data_year_note": "The supplied routes.dat file does not record a snapshot date.",
+  "database_license": "Open Database License (ODbL) 1.0",
+  "contents_license": "Database Contents License (DbCL) 1.0"
+}

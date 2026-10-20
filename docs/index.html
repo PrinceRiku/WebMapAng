@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173a36">
+  <title>Flight Network | U.S. Airport Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="wordmark" href="#top" aria-label="Flight Network home">FLIGHT<span>/</span>NETWORK</a>
+      <div class="masthead-meta"><span class="live-dot"></span> DOMESTIC ROUTE GRAPH <span class="meta-divider">/</span> U.S. + TERRITORIES</div>
+    </div>
+  </header>
+
+  <main id="top" class="page-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">ISC 4221 · AIR TRANSPORT NETWORK</p>
+        <h1 id="page-title">Where can you go<br><em>from here?</em></h1>
+      </div>
+      <p class="intro-copy">Explore the airports, routes, and connection structure in a domestic flight network. Select a station, search an IATA code, or test whether two airports are connected.</p>
+    </section>
+
+    <div id="load-status" class="load-status" role="status">Loading network data…</div>
+
+    <section class="dashboard-grid" aria-label="Flight network explorer">
+      <section class="panel map-panel" aria-labelledby="map-title">
+        <div class="panel-heading">
+          <div class="panel-title-wrap"><span class="panel-letter">A</span><div><p class="panel-kicker">GEOGRAPHY</p><h2 id="map-title">Network map</h2></div></div>
+          <button id="fit-network" class="quiet-button" type="button" title="Fit the contiguous U.S., Alaska, and Hawaii">Fit U.S. view <span aria-hidden="true">↗</span></button>
+        </div>
+        <div id="network-map" aria-label="Interactive map of airports and domestic routes"></div>
+        <div class="map-foot"><span><i class="legend-route"></i> Domestic route</span><span><i class="legend-active"></i> Selected / connected</span><span id="map-count">— airports · — routes</span></div>
+      </section>
+
+      <section class="panel lookup-panel" aria-labelledby="lookup-title">
+        <div class="panel-heading">
+          <div class="panel-title-wrap"><span class="panel-letter">B</span><div><p class="panel-kicker">IATA SEARCH</p><h2 id="lookup-title">Airport lookup</h2></div></div>
+        </div>
+        <form id="lookup-form" class="lookup-form">
+          <label class="sr-only" for="lookup-code">Airport code</label>
+          <input id="lookup-code" name="code" type="text" maxlength="3" autocomplete="off" placeholder="Enter code" aria-describedby="lookup-result" required>
+          <button class="primary-button" type="submit">Search <span aria-hidden="true">→</span></button>
+        </form>
+        <div id="lookup-result" class="lookup-result" aria-live="polite"><p class="empty-state">Select an airport on the map or search a three-letter code.</p></div>
+      </section>
+
+      <section class="panel summary-panel" aria-labelledby="summary-title">
+        <div class="panel-heading">
+          <div class="panel-title-wrap"><span class="panel-letter">C</span><div><p class="panel-kicker">NETWORK STATISTICS</p><h2 id="summary-title">At a glance</h2></div></div>
+        </div>
+        <div id="network-metrics" class="metrics-grid"></div>
+        <div class="summary-columns">
+          <section class="summary-block" aria-labelledby="hub-title"><div class="subheading"><h3 id="hub-title">Top hubs</h3><span>BY DEGREE</span></div><div id="hub-chart" class="hub-chart"></div></section>
+          <section class="summary-block components-block" aria-labelledby="components-title"><div class="subheading"><h3 id="components-title">Components</h3><span>SELECT TO LOCATE</span></div><div id="component-list" class="component-list"></div></section>
+        </div>
+      </section>
+
+      <section class="panel checker-panel" aria-labelledby="checker-title">
+        <div class="panel-heading">
+          <div class="panel-title-wrap"><span class="panel-letter">D</span><div><p class="panel-kicker">CONNECTION ALGORITHM</p><h2 id="checker-title">Can I get there?</h2></div></div>
+        </div>
+        <form id="connection-form" class="connection-form">
+          <div class="select-row">
+            <label>From<select id="origin-code" name="origin"></select></label>
+            <span class="journey-arrow" aria-hidden="true">→</span>
+            <label>To<select id="destination-code" name="destination"></select></label>
+          </div>
+          <button class="primary-button check-button" type="submit">Check connection <span aria-hidden="true">→</span></button>
+        </form>
+        <div id="connection-result" class="connection-result" aria-live="polite"><p class="empty-state">Choose two airports to check whether a route exists.</p></div>
+      </section>
+
+      <section class="panel about-panel" aria-labelledby="about-title">
+        <div class="panel-heading">
+          <div class="panel-title-wrap"><span class="panel-letter">E</span><div><p class="panel-kicker">SCOPE & SOURCES</p><h2 id="about-title">About this network</h2></div></div>
+        </div>
+        <div class="about-grid">
+          <p class="about-copy">Each line represents a unique, undirected airport pair found in the supplied route data. Airport degree counts distinct neighboring airports. The connection checker searches this graph one route layer at a time, so its iteration count is also the fewest flights when a path exists. The displayed network contains the selected U.S. and territory airports that have at least one domestic route; airports with no route are counted separately.</p>
+          <dl class="source-details">
+            <div><dt>Airport / route data</dt><dd>OpenFlights database; airport records attributed to <a href="https://ourairports.com/data/" target="_blank" rel="noreferrer">OurAirports</a></dd></div>
+            <div><dt>Route snapshot</dt><dd id="snapshot-note">Not specified in the supplied file</dd></div>
+            <div><dt>Data license</dt><dd><a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noreferrer">ODbL 1.0</a> · contents: <a href="https://opendatacommons.org/licenses/dbcl/1-0/" target="_blank" rel="noreferrer">DbCL 1.0</a></dd></div>
+            <div><dt>Project</dt><dd><a href="https://github.com/PrinceRiku/ISC4221" target="_blank" rel="noreferrer">Repository</a> · <a href="https://github.com/PrinceRiku/ISC4221/blob/main/report.md" target="_blank" rel="noreferrer">Report</a></dd></div>
+          </dl>
+        </div>
+        <p class="map-attribution">Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a>; map style © <a href="https://opentopomap.org" target="_blank" rel="noreferrer">OpenTopoMap</a> (CC-BY-SA). Routes and airport locations are supplied data, not live schedules.</p>
+      </section>
+    </section>
+    <footer class="page-footer"><span>FLIGHT/NETWORK</span><span>STATIC DATA EXPLORER <i>·</i> BUILT FOR ISC 4221</span></footer>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="app.js"></script>
+</body>
+</html>
